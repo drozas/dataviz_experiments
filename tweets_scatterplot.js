@@ -70,5 +70,7 @@ function dataViz(incomingData) {
 	
 	tweetG.append("text")
 		.text(function (d) {return d.user + "-" + d.tweetTime.getHours();});
+	
+	d3.selectAll("g").select("text").text(function(d) {return d;});
 
 }
