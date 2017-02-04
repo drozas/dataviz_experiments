@@ -1,4 +1,4 @@
-d3.json("tweets.json", function(error,data) {dataViz(data.tweets);});
+d3.csv("cities.csv", function(error,data) {dataViz(data);});
 
 function dataViz(incomingData) {
 	//Define max function
