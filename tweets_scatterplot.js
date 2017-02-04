@@ -35,5 +35,6 @@ function dataViz(incomingData) {
 		.style("fill", "blue")
 		.style("stroke", "red")
 		.style("stroke-width", "1px")
-		.style("opacity", .25)
+		.style("opacity", .25);
+
 }

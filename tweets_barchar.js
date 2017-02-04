@@ -48,4 +48,16 @@ function dataViz(incomingData) {
 		.style("fill", function (d) {return colorScale(d.impact);})
 		.style("stroke", "black")
 		.style("stroke-width", "1px");
+	
+	var tweetG = d3.select("svg")
+		.selectAll("g")
+		.data(incomingData)
+		.enter()
+		.append("g")
+		.attr("transform", function(d) {
+			return "translate(" + 
+			timeRamp(d.tweetTime) + "," + (480 - yScale(d.impact))
+			+ ")"
+		});
+
 }
