@@ -49,6 +49,7 @@ function dataViz(incomingData) {
 		.style("stroke", "black")
 		.style("stroke-width", "1px");
 	
+	// SVG Transform Attribute applies a list of transformations to an element and it's children.
 	var tweetG = d3.select("svg")
 		.selectAll("g")
 		.data(incomingData)
@@ -59,5 +60,15 @@ function dataViz(incomingData) {
 			timeRamp(d.tweetTime) + "," + (480 - yScale(d.impact))
 			+ ")"
 		});
+	
+	//This is basically overwitting the filling previous values
+	tweetG.append("circle")
+		.attr("r", function (d) {return radiusScale(d.impact);})
+		.style("fill", "#990000")
+		.style("stroke", "black")
+		.style("stroke-width", "1px");
+	
+	tweetG.append("text")
+		.text(function (d) {return d.user + "-" + d.tweetTime.getHours();});
 
 }
