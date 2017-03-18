@@ -1,20 +1,112 @@
-<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link type="text/css" rel="stylesheet" href="d3ia.css" />
-<title>Test</title>
+  <title>D3 in Action Chapter 3 - Example 1</title>
+  <meta charset="utf-8" />
+<script src="d3.v3.min.js" type="text/JavaScript"></script>
 </head>
+<style>
+  svg {
+    height: 500px;
+    width: 500px;
+    border: 1px solid gray;
+  }
+  
+  text {
+font-size: 10px;
+}
 
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script src="colorbrewer.js" type="text/javascript"></script>
-<script src="soccerviz.js" type="text/javascript"></script>
+g > text.active {
+font-size: 30px;
+}
 
-<body onload="createSoccerViz()">
-<div id="vizcontainer">
-	<svg style="width:500px;height:500px;boder:1px lightgray solid;">
-	</svg>
-	<div id="controls" />
+circle {
+fill: pink;
+stroke: black;
+stroke-width: 1px;
+}
+
+circle.active {
+fill: red;
+}
+
+circle.inactive {
+fill: gray;
+}
+
+</style>
+<body>
+
+<div id="viz">
+  <svg>
+  </svg>
 </div>
+<div id="controls" />
 </body>
+  <footer>
+    
+<script>
+  d3.csv("worldcup.csv", function(data) {
+    overallTeamViz(data);
+  })
+  
+function overallTeamViz(incomingData) {
+	d3.select("svg")
+	.append("g")
+	.attr("id", "teamsG")
+	.attr("transform", "translate(50,300)") // Position the group
+	.selectAll("g")
+	.data(incomingData)
+	.enter()
+	.append("g")
+	.attr("class", "overallG")
+	.attr("transform", function (d,i) {return "translate(" + (i * 50) + ", 0)"}); //Adding also an attribute with a transformation
+	    
+	var teamG = d3.selectAll("g.overallG");
+	    
+	teamG
+	.append("circle") // Create a circle for each element
+	.attr("r", 20)
+	.style("fill", "pink")
+	.style("stroke", "black")
+	.style("stroke-width", "1px")
+	
+	teamG
+	.append("text")
+	.style("text-anchor", "middle") // Append the team name as label
+	.attr("y", 30)
+	.style("font-size", "10px")
+	.text(function(d) {return d.team})
+
+	//Get all the attributes that are numerical to create the buttons dynamically
+	var dataKeys = d3.keys(incomingData[0]).filter(function (el) {
+		return el != "team" && el != "region"; // Filter team and region, which are the string-based ones
+	});
+	
+	d3.select("#controls").selectAll("button.teams")
+		.data( dataKeys).enter() //Build a button for each of the elements in the dataKeys
+		.append("button")
+		.on("click", buttonClick) //Register an onclick behaivour for each button, with a wrapper that gives access to the data bound
+		.html(function (d) {return d;});
+	
+	//Define behaivour for buttonclick, with the bound data sent automatically as the first argument
+	function buttonClick(datapoint) {
+		var maxValue = d3.max(incomingData, function (d) {
+			return parseFloat(d[datapoint]);
+		}
+		);
+	
+	
+	var radiusScale = d3.scale.linear()
+		.domain([0, maxValue]).range([2, 20]);
+	
+	d3.selectAll("g.overallG").select("circle")
+		.attr("r", function(d){
+			return radiusScale(d[datapoint]);
+		});
+	}
+}
+
+</script>
+  </footer>
+
 </html>
