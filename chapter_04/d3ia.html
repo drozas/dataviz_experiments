@@ -62,7 +62,8 @@ path.domain {
 		d3.select("svg").append("g")
 		.attr("transform", "translate (0,480)") //offset the g containing the axis
 		.attr("id", "xAxisG")
-		.call(xAxis);		
+		.call(xAxis);
+		d3.select("#xAxisG > path.domain").style("display", "none");
 
 		d3.select("svg")
 		.selectAll("circle.mediam")
@@ -127,6 +128,29 @@ path.domain {
 			.style("stroke", "black")
 			.style("stroke-width", "4px");
 		})	
+		.each(function (d,i) {
+				// Draw the internal rectangle
+				d3.select(this)
+				.append("rect")
+				.attr("width", 20)
+				.attr("x", -10) // Set a negative offsest of half the width to center the rectangle horizontally
+				.attr("y", yScale(d.q3) - yScale(d.median)) // Offset the rectangle by the difference between the middle and the high end of the distribution
+				.attr("height", yScale(d.q1) - yScale(d.q3))
+				.style("fill", "white")
+				.style("stroke", "black")
+				.style("stroke-width", "2px");
+			})
+		.each(function (d,i) {
+				// Mediam line
+				d3.select(this)
+				.append("line")
+				.attr("x1", -10)
+				.attr("x2", 10)
+				.attr("y1", 0) //Mediam line doesnt need to be ofset because the parent is already centered
+				.attr("y2", 0)
+				.style("stroke", "darkgray")
+				.style("stroke-width", "4px");
+			})
 		;
 		
 			
