@@ -111,7 +111,8 @@ path.domain {
 				})
 			.y(function (d){
 					return yScale(d.tweets); // Same as before, but with tweets
-				});
+				})
+			.interpolate("basis");
 		d3.select("svg")
 			.append("path")
 			.attr("d", tweetLine(data))
@@ -126,7 +127,8 @@ path.domain {
 				})
 			.y(function (d){
 					return yScale(d.retweets); // Same as before, but with tweets
-				});
+				})
+			.interpolate("step");
 		d3.select("svg")
 			.append("path")
 			.attr("d", retweetLine(data))
@@ -141,14 +143,15 @@ path.domain {
 				})
 			.y(function (d){
 					return yScale(d.favorites); // Same as before, but with tweets
-				});
+				})
+			.interpolate("cardinal");
 		d3.select("svg")
 			.append("path")
 			.attr("d", favLine(data))
 			.attr("fill", "none")
 			.attr("stroke", "black")
 			.attr("stroke-width", 2);
-	
+		
 	}
 	
 	//d3.selectAll("path.domain").style("fill", "none").style("stroke", "black");
