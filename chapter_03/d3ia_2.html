@@ -83,6 +83,16 @@ function overallTeamViz(incomingData) {
 	.attr("y", 30)
 	.style("font-size", "10px")
 	.text(function(d) {return d.team})
+	
+	//Insert images for each team
+	d3.selectAll("g.overallG").insert("image", "text")
+		.attr("xlink:href", function (d) {
+			return "images/" + d.team + ".png";	
+		})
+		.attr("width", "45px")
+		.attr("height", "20px")
+		.attr("x", "-22")
+		.attr("y", "-10");
 
 	//Get all the attributes that are numerical to create the buttons dynamically
 	var dataKeys = d3.keys(incomingData[0]).filter(function (el) {
