@@ -3,7 +3,6 @@
   <title>D3 in Action Chapter 4 - Example 1</title>
   <meta charset="utf-8" />
 <script src="d3.v3.min.js" type="text/JavaScript"></script>
-<script src="colorbrewer.js" type="text/JavaScript"></script>
 </head>
 <style>
   svg {
@@ -11,6 +10,20 @@
     width: 500px;
     border: 1px solid gray;
   }
+line {
+  shape-rendering: crispEdges;
+  stroke: #000000;
+  }
+
+line.minor  {
+  stroke: #777777;
+  stroke-dasharray: 2,2;
+}
+
+path.domain {
+  fill: none;
+  stroke: black;
+}
 
 </style>
 <body>
@@ -24,17 +37,107 @@
   <footer>
     
 <script>
-var scatterData = [{friends: 5, salary: 22000}, {friends: 3, salary: 18000}, {friends: 10, salary: 88000}, {friends: 0, salary: 180000}, {friends: 27, salary: 56000}, {friends: 8, salary: 74000}]
 
-d3.select("svg")
-.selectAll("circle")
-.data(scatterData)
-.enter()
-.append("circle")
-.attr("r", 5)
-.attr("cx", function(d,i) {return i * 10})
-.attr("cy", function(d) {return d.friends});
+	d3.csv("boxplot.csv", scatterplot);
+	
+	function scatterplot(data) {
+		var xScale = d3.scale.linear().domain([1,8]).range([20, 470]);
+		var yScale = d3.scale.linear().domain([0,100]).range([480, 20]); //Scale inverted to higher values are up
+		
+		var yAxis = d3.svg.axis().scale(yScale)
+		.orient("right")
+		.ticks(8)
+		.tickSize(-470);
+		
+		d3.select("svg").append("g")
+		.attr("transform", "translate (470,0)") //offset the g containing the axis
+		.attr("id", "yAxisG")
+		.call(yAxis);
+		
+		var xAxis = d3.svg.axis().scale(xScale)
+		.orient("bottom")
+		.tickSize(-470)
+		.tickValues([1,2,3,4,5,6,7]); //specify precise tick values to match the days of the week
+		
+		d3.select("svg").append("g")
+		.attr("transform", "translate (0,480)") //offset the g containing the axis
+		.attr("id", "xAxisG")
+		.call(xAxis);		
 
+		d3.select("svg")
+		.selectAll("circle.mediam")
+		.data(data)
+		.enter()
+		.append("circle")
+		.attr("r", 5)
+		.attr("cx", function(d) {return xScale(d.day);})
+		.attr("cy", function(d) {return yScale(d.median);})
+		.style("fill", "darkgray");
+		
+		
+		d3.select("svg")
+		.selectAll("g.box")
+		.data(data)
+		.enter()
+		.append("g")
+		.attr("class", "box")
+		.attr("transform", function(d) {return "translate(" + xScale(d.day) + "," + yScale(d.median) + ")";})
+		.each(function (d,i) {
+				// Draw the rectangle
+				d3.select(this)
+				.append("rect")
+				.attr("width", 20)
+				.attr("x", -10) // Set a negative offsest of half the width to center the rectangle horizontally
+				.attr("y", yScale(d.q3) - yScale(d.median)) // Offset the rectangle by the difference between the middle and the high end of the distribution
+				.attr("height", yScale(d.q1) - yScale(d.q3));
+			})
+		.each(function (d,i) {
+			// Draw line for min max
+			d3.select(this)
+			.append("line")
+			.attr("class", "range")
+			.attr("x1", 0)
+			.attr("x2", 0)
+			.attr("y1", yScale(d.max) - yScale(d.median)) // Offset the rectangle by the difference between the middle and the high end of the distribution
+			.attr("y2", yScale(d.min) - yScale(d.median))
+			.style("stroke", "black")
+			.style("stroke-width", "4px");
+		})
+		.each(function (d,i) {
+			// Top bar of min max line
+			d3.select(this)
+			.append("line")
+			.attr("class", "max")
+			.attr("x1", -10)
+			.attr("x2", 10)
+			.attr("y1", yScale(d.max) - yScale(d.median)) // Offset the rectangle by the difference between the middle and the high end of the distribution
+			.attr("y2", yScale(d.max) - yScale(d.median))
+			.style("stroke", "black")
+			.style("stroke-width", "4px");
+		})	
+		.each(function (d,i) {
+			// Top bar of min max line
+			d3.select(this)
+			.append("line")
+			.attr("class", "min")
+			.attr("x1", -10)
+			.attr("x2", 10)
+			.attr("y1", yScale(d.min) - yScale(d.median)) // Offset the rectangle by the difference between the middle and the high end of the distribution
+			.attr("y2", yScale(d.min) - yScale(d.median))
+			.style("stroke", "black")
+			.style("stroke-width", "4px");
+		})	
+		;
+		
+			
+	
+	}
+	
+	//d3.selectAll("path.domain").style("fill", "none").style("stroke", "black");
+	//d3.selectAll("line").style("stroke", "black");
+	
+	//d3.selectAll("#xAxisG").attr("transform", "translate (0,500)");
+	
 </script>
   </footer>
 
