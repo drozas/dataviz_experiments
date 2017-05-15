@@ -8,19 +8,6 @@
 <script src="http://d3js.org/queue.v1.min.js"></script>
 <script>
 
-var marker = d3.select("svg").append('defs')
-.append('marker')
-.attr("id", "Triangle")
-.attr("refX", 12)
-.attr("refY", 6)
-.attr("markerUnits", 'userSpaceOnUse')
-.attr("markerWidth", 12)
-.attr("markerHeight", 18)
-.attr("orient", 'auto')
-.append('path')
-.attr("d", 'M 0 0 12 6 0 12 3 6');
-
-
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -54,7 +41,7 @@ function createForceLayout (nodes, links) {
     .selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-    .attr("r", 6)
+    .attr("r", 5)
     .style("fill", "lightgray")
     .style("stroke", "black")
     .style("stroke-width", "1px")
@@ -66,12 +53,6 @@ function createForceLayout (nodes, links) {
 
   node.append("title")
       .text(function(d) { return d.id; });
-  
-  node.append("text")
-  .style("text-anchor", "middle")
-  .attr("y", 15)
-  .text(function(d) {return d.id})
-d3.selectAll("line").attr("marker-end", "url(#Triangle)");
 
   simulation
       .nodes(nodes)

@@ -68,7 +68,7 @@ function createForceLayout(nodes,edges) {
   .style("stroke-width", "1px");
 
   nodeEnter.append("text")
-  .style("text-anchor", "middle")
+  .style("text-node")
   .attr("y", 35)
   .text(function(d) {return d.concept_name + "(" + d.id + ")"});
   
