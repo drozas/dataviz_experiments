@@ -26,8 +26,8 @@
     
 <script>
     queue()
-    .defer(d3.csv, "nodelist.csv")
-    .defer(d3.csv, "edgelist.csv")
+    .defer(d3.json, "http://dev-candid-project.pantheonsite.io/api/concepts/nodes")
+    .defer(d3.json, "edgelist.csv")
     .await(function(error, file1, file2) { createAdjacencyMatrix(file1, file2); });
     
     function createAdjacencyMatrix(nodes,edges) {
