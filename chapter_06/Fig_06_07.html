@@ -62,14 +62,14 @@ function createForceLayout(nodes,edges) {
   .attr("class", "node");
   
   nodeEnter.append("circle")
-  .attr("r", 5)
+  .attr("r", 15)
   .style("fill", "lightgray")
   .style("stroke", "black")
   .style("stroke-width", "1px");
 
   nodeEnter.append("text")
   .style("text-anchor", "middle")
-  .attr("y", 15)
+  .attr("y", 35)
   .text(function(d) {return d.concept_name + "(" + d.id + ")"});
   
   force.start();
