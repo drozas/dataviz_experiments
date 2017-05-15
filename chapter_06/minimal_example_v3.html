@@ -1,0 +1,91 @@
+<html>
+<head>
+  <title>D3 in Action Chapter 6 - Example 3</title>
+  <meta charset="utf-8" />
+<script src="d3.v3.min.js" type="text/JavaScript"></script>
+<script src="colorbrewer.js" type="text/JavaScript"></script>
+<script src="queue.js" type="text/JavaScript"></script>
+</head>
+<style>
+  svg {
+    height: 500px;
+    width: 500px;
+    border: 1px solid gray;
+  }
+  
+</style>
+<body>
+
+<div id="viz">
+  <svg>
+  </svg>
+</div>
+<div id="controls" />
+</body>
+  <footer>
+    
+<script>
+           
+queue()
+.defer(d3.json, "https://api.myjson.com/bins/eody1")
+.defer(d3.json, "https://api.myjson.com/bins/wlj95")
+.await(function(error, file1, file2) { createForceLayout(file1, file2); });
+
+function createForceLayout(nodes,edges) {
+  
+  var force = d3.layout.force()
+  .charge(-1000)
+  .size([500,500])
+  .nodes(nodes)
+  .links(edges)
+  .linkDistance(250)
+  .on("tick", forceTick);
+  
+  //force.linkDistance(width/2);
+
+  //console.log(nodes);
+  //console.log(edges);
+  d3.select("svg").selectAll("line.link")
+  .data(edges)
+  .enter()
+  .append("line")
+  .attr("class", "link")
+  .style("stroke", "black")
+  .style("opacity", .5)
+  .style("stroke-width", "2px");
+  //.style("stroke-width", function(d) {return d.weight});
+  
+  var nodeEnter = d3.select("svg").selectAll("g.node")
+  .data(nodes, function (d) {return d.id})
+  .enter()
+  .append("g")
+  .attr("class", "node");
+  
+  nodeEnter.append("circle")
+  .attr("r", 15)
+  .style("fill", "lightgray")
+  .style("stroke", "black")
+  .style("stroke-width", "1px");
+
+  nodeEnter.append("text")
+  .style("text-anchor", "middle")
+  .attr("y", 35)
+  .text(function(d) {return d.concept_name + "(" + d.id + ")"});
+  
+  force.start();
+
+  function forceTick() {
+  d3.selectAll("line.link")
+  .attr("x1", function (d) {return d.source.x})
+  .attr("x2", function (d) {return d.target.x})
+  .attr("y1", function (d) {return d.source.y})
+  .attr("y2", function (d) {return d.target.y});
+  
+  d3.selectAll("g.node")
+  .attr("transform", function (d) {return "translate("+d.x+","+d.y+")"})
+  }
+}
+</script>
+  </footer>
+
+</html>
