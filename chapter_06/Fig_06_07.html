@@ -53,8 +53,11 @@ function createForceLayout (nodes, links) {
     .attr("class", "nodes")
     .selectAll("circle")
     .data(nodes)
-    .enter().append("circle")
-    .attr("r", 6)
+    .enter()
+    .append("g")
+    .attr("class", "node")
+    .append("circle")
+    .attr("r", 5)
     .style("fill", "lightgray")
     .style("stroke", "black")
     .style("stroke-width", "1px")
@@ -70,8 +73,9 @@ function createForceLayout (nodes, links) {
   node.append("text")
   .style("text-anchor", "middle")
   .attr("y", 15)
-  .text(function(d) {return d.id})
-d3.selectAll("line").attr("marker-end", "url(#Triangle)");
+  .text(function(d) {return d.id});
+  
+  d3.selectAll("line").attr("marker-end", "url(#Triangle)");
 
   simulation
       .nodes(nodes)
