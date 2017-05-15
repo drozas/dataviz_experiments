@@ -3,51 +3,101 @@
 <head>
     <meta charset='utf-8'>
     <title>Force Layout Example 1</title>
-    <style>
 
-.node {
-    fill: #ccc;
-    stroke: #fff;
-    stroke-width: 2px;
-}
-
-.link {
-    stroke: #777;
-    stroke-width: 2px;
-}
-
-    </style>
-</head>
 <body>
 
-<p><canvas height="600" width="1150"></canvas> <script src="https://d3js.org/d3.v4.min.js"></script>
+<div id="viz">
+  <svg>
+  </svg>
+</div>
+<div id="controls" />
+
+<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+<script src='http://d3js.org/d3.v3.min.js'></script>
 
 <script>
+
+//Define the dimensions of the visualization. We're using
+//a size that's convenient for displaying the graphic on
+//http://jsDataV.is
+
+var width = 640,
+ height = 480;
+
+
 d3.json("http://dev-candid-project.pantheonsite.io/api/concepts/nodes", function(error, dataNodes) {
 
 	d3.json("http://dev-candid-project.pantheonsite.io/api/concepts/edges", function(error, dataEdges) {
-	dataViz(dataNodes, dataEdges);
+		createForceLayout(dataNodes, dataEdges);
 	});
 });
 
-function dataViz(incomingNodes, incomingEdges){
+
+function createForceLayout(incomingNodes, incomingEdges){
+
+	var svg = d3.select('body').append('svg')
+	.attr('width', width)
+	.attr('height', height);
+
+	// Now we create a force layout object and define its properties.
+	// Those include the dimensions of the visualization and the arrays
+	// of nodes and links.
+
+	var force = d3.layout.force()
+	    .size([width, height])
+	    .nodes(nodes)
+	    .links(links);
 	
-	d3.select("body").selectAll("div.nodes")
+	// Next we'll add the nodes and links to the visualization.
+	// Note that we're just sticking them into the SVG container
+	// at this point. We start with the links. The order here is
+	// important because we want the nodes to appear "on top of"
+	// the links. SVG doesn't really have a convenient equivalent
+	// to HTML's `z-index`; instead it relies on the order of the
+	// elements in the markup. By adding the nodes _after_ the
+	// links we ensure that nodes appear on top of links.
+
+	// Links are pretty simple. They're just SVG lines, and
+	// we're not even going to specify their coordinates. (We'll
+	// let the force layout take care of that.) Without any
+	// coordinates, the lines won't even be visible, but the
+	// markup will be sitting inside the SVG container ready
+	// and waiting for the force layout.
+
+	var link = svg.selectAll('.link')
+	    .data(links)
+	    .enter().append('line')
+	    .attr('class', 'link');
+
+	// Now it's the nodes turn. Each node is drawn as a circle.
+
+	var node = svg.selectAll('.node')
+	    .data(nodes)
+	    .enter().append('circle')
+	    .attr('class', 'node');
+}
+
+
+
+/*function dataViz(incomingNodes, incomingEdges){
+	
+	d3.select("svg").selectAll("div.nodes")
 	.data(incomingNodes)
 	.enter()
 	.append("div")
 	.attr("class","nodes")
 	.html(function(d,i) {return d.concept_name; });
 
-	d3.select("body").selectAll("div.edges")
+	d3.select("svg").selectAll("div.edges")
 	.data(incomingEdges)
 	.enter()
 	.append("div")
 	.attr("class","edges")
 	.html(function(d,i) {return d.source; });
 
-}
-</script></p>
+}*/
+</script>
 
 
 </body>
