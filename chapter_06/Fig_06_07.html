@@ -2,16 +2,6 @@
 <meta charset="utf-8">
 <style>
 
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
-}
-
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-
 </style>
 <svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -40,20 +30,26 @@ function createForceLayout (nodes, links) {
     .attr("class", "links")
     .selectAll("line")
     .data(links)
-    .enter().append("line");
+    .enter().append("line")
+    .style("stroke", "black")
+    .style("opacity", .5)
+    .style("stroke-width", "2px");
     //.attr("stroke-width", function(d) { return Math.sqrt(d.value); });
 
   var node = svg.append("g")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
     .selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-      .attr("r", 5)
+    .attr("r", 5)
+    .style("fill", "lightgray")
+    .style("stroke", "black")
+    .style("stroke-width", "1px")
       //.attr("fill", function(d) { return color(d.concept_name); }) //In fact this is TA (but like this for the moment)
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
+    .call(d3.drag()
+       .on("start", dragstarted)
+       .on("drag", dragged)
+       .on("end", dragended));
 
   node.append("title")
       .text(function(d) { return d.id; });
@@ -77,9 +73,6 @@ function createForceLayout (nodes, links) {
         .attr("cy", function(d) { return d.y; });
   }
 }
-
-
-
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
