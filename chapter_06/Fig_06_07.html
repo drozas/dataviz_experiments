@@ -4,11 +4,8 @@
 
 </style>
 
-<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
-<svg width="960" height="600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="http://d3js.org/queue.v1.min.js"></script>
-<script>
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
+<p><script src="https://d3js.org/d3.v4.min.js"></script><script src="http://d3js.org/queue.v1.min.js"></script><script>
 
 var nodes_url = "https://api.myjson.com/bins/1dedy1";
 var edges_url = "https://api.myjson.com/bins/74lzt";
@@ -36,7 +33,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody().strength(-1000).distanceMin(50))
+    .force("charge", d3.forceManyBody().strength(-200).theta(0.4).distanceMin(15).distanceMax(100))
     .force("center", d3.forceCenter(width / 3, height / 2));
     
     
@@ -105,18 +102,6 @@ function createForceLayout (nodes, links) {
   simulation.force("link")
       .links(links);
 
-  /*function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  }*/
-  
   function ticked() {
 	    link
 	      .attr("x1", function(d) {
@@ -156,4 +141,9 @@ function dragended(d) {
   d.fy = null;
 }
 
-</script>
+</script></p>
+
+<blockquote>
+<hr />
+<h2 class="text-align-justify">This project will study aspects of the 'smart' agenda in which practitioners from the Social and Human Sciences (SSH) offer unique and valuable insights of relevance to innovators and researchers in the ICT - LEIT[1] areas. Centred on topics concerning of users, design, digital rights and critical infrastructures, CANDID will engage SSH and ICT - LEIT researchers in ‘extended peer communications’ aiming at Responsible Innovation.</h2>
+</blockquote>
