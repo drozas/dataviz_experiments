@@ -28,13 +28,14 @@ var marker = d3.select("svg").append('defs')
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
+    
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
     .force("charge", d3.forceManyBody().strength(-200).theta(0.4).distanceMin(15).distanceMax(100))
-    .force("center", d3.forceCenter(width / 3, height / 2));
+    .force("center", d3.forceCenter(width / 2, height / 2));
     
     
 queue()
@@ -94,7 +95,25 @@ function createForceLayout (nodes, links) {
 
   //Draw markers  
   d3.selectAll("line").attr("marker-end", "url(#Triangle)");
-
+  
+  //Events to display extra information  
+  svg.selectAll(".node")
+  .on("mouseover", function(d,i) {
+	  	var d = this.__data__;
+	  	svg.append("text")
+	  	 .attr("id", "tooltip")
+	     .attr("x", 50)
+	   	 .attr("y", 15)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .text(d.id);
+      })
+  .on("mouseout", function() {
+        var sel = d3.select(this);
+         sel.classed("hovered",false);
+         d3.select("#tooltip").remove();
+      })  
+  
   simulation
       .nodes(nodes)
       .on("tick", ticked);
