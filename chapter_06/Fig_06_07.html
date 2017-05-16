@@ -120,17 +120,21 @@ function createForceLayout (nodes, links) {
 	   	 .attr("y", 50)
 	     .attr("height", 100)
 	     .attr("width", 200)
+	     .style("font-size", "13px")
+  		 .style("font-weight", "bold")
+ 		 .style("font-family", "Quicksand")
+	     .text(d.thematic_areas);
+	  	 
+	  	 info.append("text")
+	  	 .attr("id", "tooltip")
+	     .attr("x", 50)
+	   	 .attr("y", 75)
+	     .attr("height", 100)
+	     .attr("width", 200)
 	     .style("font-size", "11px")
  		 .style("font-family", "Quicksand")
 	     .text(d.body);
 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 200)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .text(d.thematic_areas);
 	  	 
 	  	 /*info.append("text")
 	  	 .attr("id", "tooltip")
