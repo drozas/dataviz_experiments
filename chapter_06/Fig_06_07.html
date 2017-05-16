@@ -7,8 +7,8 @@
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
 <p><script src="https://d3js.org/d3.v4.min.js"></script><script src="http://d3js.org/queue.v1.min.js"></script><script>
 
-var nodes_url = "https://api.myjson.com/bins/1dedy1";
-var edges_url = "https://api.myjson.com/bins/74lzt";
+var nodes_url = "https://api.myjson.com/bins/tki3l";
+var edges_url = "https://api.myjson.com/bins/o9qtd";
 //var nodes_url = "http://dev-candid-project.pantheonsite.io/api/concepts/nodes";
 //var edges_url = "http://dev-candid-project.pantheonsite.io/api/concepts/edges";
 
@@ -106,7 +106,7 @@ function createForceLayout (nodes, links) {
 	   	 .attr("y", 15)
 	     .attr("height", 100)
 	     .attr("width", 200)
-	     .text(d.id);
+	     .text(d.id + "body = " + d.body + "thematic_areas = " + d.thematic_areas + "documents = " + d.documents);
       })
   .on("mouseout", function() {
         var sel = d3.select(this);
