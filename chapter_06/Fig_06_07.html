@@ -2,7 +2,16 @@
 <meta charset="utf-8">
 <style>
 
+/*@import url('https://fonts.googleapis.com/css?family=Quicksand');*/
+
+.node {
+    /*margin-top: 50px;*/
+	font-family: 'Quicksand', sans-serif;
+}
+
 </style>
+
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
 <svg width="960" height="600"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
@@ -16,7 +25,7 @@ var edges_url = "https://api.myjson.com/bins/74lzt";
 var marker = d3.select("svg").append('defs')
 .append('marker')
 .attr("id", "Triangle")
-.attr("refX", 12)
+.attr("refX", 20)
 .attr("refY", 6)
 .attr("markerUnits", 'userSpaceOnUse')
 .attr("markerWidth", 12)
@@ -34,8 +43,9 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("charge", d3.forceManyBody().strength(-1000).distanceMin(50))
+    .force("center", d3.forceCenter(width / 3, height / 2));
+    
     
 queue()
 .defer(d3.json, nodes_url)
@@ -66,10 +76,10 @@ function createForceLayout (nodes, links) {
   
   //Draw circles
   var circles = node.append("circle")
-  .attr("r", 5)
+  .attr("r", 10)
   .style("fill", "lightgray")
   .style("stroke", "black")
-  .style("stroke-width", "1px")
+  .style("stroke-width", "2px")
   .call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
@@ -84,7 +94,9 @@ function createForceLayout (nodes, links) {
   //Draw node text
   var text = node.append("text")
   .style("text-anchor", "middle")
-  .attr("y", 15)
+  .attr("y", 25)
+  .style("font-size", "15px")
+  .style("font-weight", "bold")
   .text(function(d) {
     return d.id
   });
