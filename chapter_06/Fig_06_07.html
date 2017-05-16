@@ -2,13 +2,6 @@
 <meta charset="utf-8">
 <style>
 
-/*@import url('https://fonts.googleapis.com/css?family=Quicksand');*/
-
-.node {
-    /*margin-top: 50px;*/
-	font-family: 'Quicksand', sans-serif;
-}
-
 </style>
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> 
@@ -97,6 +90,7 @@ function createForceLayout (nodes, links) {
   .attr("y", 25)
   .style("font-size", "15px")
   .style("font-weight", "bold")
+  .style("font-family", "Quicksand")
   .text(function(d) {
     return d.id
   });
