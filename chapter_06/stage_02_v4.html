@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
+<p><script src="https://d3js.org/d3.v4.min.js"></script><script src="http://d3js.org/queue.v1.min.js"></script><script>
+
+var nodes_url = "https://api.myjson.com/bins/1dedy1";
+var edges_url = "https://api.myjson.com/bins/74lzt";
+//var nodes_url = "http://dev-candid-project.pantheonsite.io/api/concepts/nodes";
+//var edges_url = "http://dev-candid-project.pantheonsite.io/api/concepts/edges";
+
+var marker = d3.select("svg").append('defs')
+.append('marker')
+.attr("id", "Triangle")
+.attr("refX", 20)
+.attr("refY", 6)
+.attr("markerUnits", 'userSpaceOnUse')
+.attr("markerWidth", 12)
+.attr("markerHeight", 18)
+.attr("orient", 'auto')
+.append('path')
+.attr("d", 'M 0 0 12 6 0 12 3 6');
+
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody().strength(-200).theta(0.4).distanceMin(15).distanceMax(100))
+    .force("center", d3.forceCenter(width / 3, height / 2));
+    
+    
+queue()
+.defer(d3.json, nodes_url)
+.defer(d3.json, edges_url)
+.await(function(error, file1, file2) {createForceLayout(file1, file2); });
+
+function createForceLayout (nodes, links) {
+	
+  //Draw links	
+  var link = svg.append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+    .style("stroke", "black")
+    .style("opacity", .5)
+    .style("stroke-width", "2px");
+    //.attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+  
+  //Draw groups for nodes
+  var node = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("concepts")
+    .data(nodes)
+    .enter()
+    .append("g")
+    .attr("class", "node");
+  
+  //Draw circles
+  var circles = node.append("circle")
+  .attr("r", 10)
+  .style("fill", "lightgray")
+  .style("stroke", "black")
+  .style("stroke-width", "2px")
+  .call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended));    
+    
+  //Draw titles
+  var titles = node.append("title")
+  .text(function(d) {
+    return d.id;
+  });
+  
+  //Draw node text
+  var text = node.append("text")
+  .style("text-anchor", "middle")
+  .attr("y", 25)
+  .style("font-size", "15px")
+  .style("font-weight", "bold")
+  .style("font-family", "Quicksand")
+  .text(function(d) {
+    return d.id
+  });
+
+  //Draw markers  
+  d3.selectAll("line").attr("marker-end", "url(#Triangle)");
+
+  simulation
+      .nodes(nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(links);
+
+  function ticked() {
+	    link
+	      .attr("x1", function(d) {
+	        return d.source.x;
+	      })
+	      .attr("y1", function(d) {
+	        return d.source.y;
+	      })
+	      .attr("x2", function(d) {
+	        return d.target.x;
+	      })
+	      .attr("y2", function(d) {
+	        return d.target.y;
+	      });
+
+	    node.attr("transform", function(d) {
+	      return "translate(" + d.x + "," + d.y + ")";
+	    })
+	  }
+  
+}
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+</script></p>
+
+<blockquote>
+<hr />
+<h2 class="text-align-justify">This project will study aspects of the 'smart' agenda in which practitioners from the Social and Human Sciences (SSH) offer unique and valuable insights of relevance to innovators and researchers in the ICT - LEIT[1] areas. Centred on topics concerning of users, design, digital rights and critical infrastructures, CANDID will engage SSH and ICT - LEIT researchers in ‘extended peer communications’ aiming at Responsible Innovation.</h2>
+</blockquote>
