@@ -44,6 +44,7 @@ queue()
 
 function createForceLayout (nodes, links) {
 	
+  //Draw links	
   var link = svg.append("g")
     .attr("class", "links")
     .selectAll("line")
@@ -53,33 +54,42 @@ function createForceLayout (nodes, links) {
     .style("opacity", .5)
     .style("stroke-width", "2px");
     //.attr("stroke-width", function(d) { return Math.sqrt(d.value); });
-
+  
+  //Draw groups for nodes
   var node = svg.append("g")
     .attr("class", "nodes")
-    .selectAll("circle")
+    .selectAll("concepts")
     .data(nodes)
     .enter()
     .append("g")
-    .attr("class", "node")
-    .append("circle")
-    .attr("r", 5)
-    .style("fill", "lightgray")
-    .style("stroke", "black")
-    .style("stroke-width", "1px")
-      //.attr("fill", function(d) { return color(d.concept_name); }) //In fact this is TA (but like this for the moment)
-    .call(d3.drag()
-       .on("start", dragstarted)
-       .on("drag", dragged)
-       .on("end", dragended));
-
-  node.append("title")
-      .text(function(d) { return d.id; });
+    .attr("class", "node");
   
-  node.append("text")
+  //Draw circles
+  var circles = node.append("circle")
+  .attr("r", 5)
+  .style("fill", "lightgray")
+  .style("stroke", "black")
+  .style("stroke-width", "1px")
+  .call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended));    
+    
+  //Draw titles
+  var titles = node.append("title")
+  .text(function(d) {
+    return d.id;
+  });
+  
+  //Draw node text
+  var text = node.append("text")
   .style("text-anchor", "middle")
   .attr("y", 15)
-  .text(function(d) {return d.id});
-  
+  .text(function(d) {
+    return d.id
+  });
+
+  //Draw markers  
   d3.selectAll("line").attr("marker-end", "url(#Triangle)");
 
   simulation
@@ -89,7 +99,7 @@ function createForceLayout (nodes, links) {
   simulation.force("link")
       .links(links);
 
-  function ticked() {
+  /*function ticked() {
     link
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
@@ -99,7 +109,28 @@ function createForceLayout (nodes, links) {
     node
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
-  }
+  }*/
+  
+  function ticked() {
+	    link
+	      .attr("x1", function(d) {
+	        return d.source.x;
+	      })
+	      .attr("y1", function(d) {
+	        return d.source.y;
+	      })
+	      .attr("x2", function(d) {
+	        return d.target.x;
+	      })
+	      .attr("y2", function(d) {
+	        return d.target.y;
+	      });
+
+	    node.attr("transform", function(d) {
+	      return "translate(" + d.x + "," + d.y + ")";
+	    })
+	  }
+  
 }
 
 function dragstarted(d) {
