@@ -141,7 +141,7 @@ function createForceLayout (nodes, links) {
 		 .attr("height", 550)
 		 .style("fill", "transparent")
 		 .style("stroke", "grey")
-		 .style("stroke-width", "5"); 
+		 .style("stroke-width", "4"); 
 	  	
 	  	 info.append("text")
 	  	 .attr("id", "tooltip")
@@ -166,14 +166,17 @@ function createForceLayout (nodes, links) {
 	  	 
 	  	 info.append("text")
 	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
+	     //.attr("x", 50)
 	   	 .attr("y", 75)
 	     .attr("height", 100)
 	     .attr("width", 200)
 	     .style("font-size", "13px")
   		 .style("font-weight", "bold")
  		 .style("font-family", "Quicksand")
-	     .text(d.thematic_areas);
+  		 .tspans(function(h) {
+        	return d3.wordwrap(d.thematic_areas, 25);  // break line after 25 characters
+    		}).attr("x", 50);
+//	     .text(d.thematic_areas);
 	  	 
 	  	 info.append("text")
     	 .attr("id", "tooltip")
@@ -184,7 +187,7 @@ function createForceLayout (nodes, links) {
 	     .style("font-size", "11px")
  		 .style("font-family", "Quicksand")
  		  		 .tspans(function(h) {
-        	return d3.wordwrap(d.body, 25);  // break line after 15 characters
+        	return d3.wordwrap(d.body, 25);  // break line after 25 characters
     		}).attr("x", 50);
 	     //.text(d.body); //Pending to be wrapped
 
