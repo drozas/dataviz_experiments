@@ -187,9 +187,9 @@ function createForceLayout (nodes, links) {
 	     .style("font-size", "11px")
  		 .style("font-family", "Quicksand")
  		  		 .tspans(function(h) {
-        	return d3.wordwrap(d.body, 25);  // break line after 25 characters
+        	return d3.wordwrap(d.desc, 25);  // break line after 25 characters
     		}).attr("x", 50);
-	     //.text(d.body); //Pending to be wrapped
+	     //.text(d.desc); //Pending to be wrapped
 
 	  	 
 	  	 /*info.append("text")
