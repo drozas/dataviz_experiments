@@ -8,7 +8,7 @@ rect:hover {
 
 #tooltip {
 	position: absolute;
-	width: 200px;
+	width: 250px;
 	height: auto;
 	padding: 10px;
 	background-color: white;
@@ -26,20 +26,26 @@ rect:hover {
 }
 
 #tooltip p {
-	margin: 0;
-	font-family: sans-serif;
+	margin: 0.5;
+	font-family: Quicksand;
 	font-size: 16px;
 	line-height: 20px;
 }
 
+#tooltip_id {
+	font-size: 20px;
+}
+
+#tooltip_desc {
+	font-size: 14px;
+}
 </style>
 
-<body>
-<div id="tooltip">
-	<p><strong>Important Label Heading</strong></p>
-	<p>Concept: <span id="id">100</span></p>
-	<p>Thematic areas: <span id="thematic_areas">100</span>%</p>
-	<p>Description: <span id="desc">100</span>%</p>
+<div id="tooltip" class="hidden">
+	<p><strong><span id="tooltip_id"></span></strong></p>
+	<p>Thematic areas: <strong><span id="tooltip_thematic_areas"></span></strong></p>
+	<hr>
+	<p><span id="tooltip_desc"></span></p>
 </div>
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
@@ -69,8 +75,8 @@ function getBaseURL() {
 
 }
 
-var nodes_url = "https://api.myjson.com/bins/ig4ip";
-var edges_url = "https://api.myjson.com/bins/o9qtd";
+var nodes_url = "https://api.myjson.com/bins/d4usl";
+var edges_url = "https://api.myjson.com/bins/125279";
 //var nodes_url = getBaseURL() + "/api/concepts/nodes";
 //var edges_url = getBaseURL() + "/api/concepts/edges";
 
@@ -116,7 +122,6 @@ function createForceLayout (nodes, links) {
     .style("stroke", "black")
     .style("opacity", .5)
     .style("stroke-width", "2px");
-    //.attr("stroke-width", function(d) { return Math.sqrt(d.value); });
   
   //Draw groups for nodes
   var node = svg.append("g")
@@ -137,7 +142,6 @@ function createForceLayout (nodes, links) {
     .on("start", dragstarted)
     .on("drag", dragged)
     .on("end", dragended));
-    //.on("click", function() { window.open(getBaseURL() + "test"); });
     
   //Add onclick url to circles
   node.selectAll("circle").on("click", function(d) { window.open(getBaseURL() + d.url); });
@@ -145,7 +149,7 @@ function createForceLayout (nodes, links) {
   //Draw titles
   var titles = node.append("title")
   .text(function(d) {
-    return d.id;
+    return d.id + " - click for +info";
   });
   
   //Draw node text
@@ -162,195 +166,24 @@ function createForceLayout (nodes, links) {
   //Draw markers  
   d3.selectAll("line").attr("marker-end", "url(#Triangle)");
   
-  //d3.select("#tooltip").classed("hidden", true);
-  
   //Events to display extra information on html
   svg.selectAll(".node")
   .on("mouseover", function(d,i) {
 	  	var d = this.__data__;
 	  	
-		//Get this bar's x/y values, then augment for the tooltip
-		//var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
-		//var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
-		//Update the tooltip position and value
-		d3.select("#tooltip")
-			//.style("left", xPosition + "px")
-			//.style("top", yPosition + "px")						
-			.select("#id")
+	  	//Unhide class and update elements
+	  	d3.select("#tooltip").classed("hidden", false);
+
+	  	d3.select("#tooltip_id")
 			.text(d.id);
    
-		d3.select("#tooltip")
-		//.style("left", xPosition + "px")
-		//.style("top", yPosition + "px")						
-		.select("#thematic_areas")
+		d3.select("#tooltip_thematic_areas")
 		.text(d.thematic_areas);
 		
-		d3.select("#tooltip")
-		//.style("left", xPosition + "px")
-		//.style("top", yPosition + "px")						
-		.select("#desc")
+		d3.select("#tooltip_desc")
 		.text(d.desc);
-		//Show the tooltip
-		//d3.select("#tooltip").classed("hidden", false);
-	  	
-	  	/*var info = svg.append("g")
-	     .attr("class", "info");
-	  	
-	  	 info.append("rect")
-	  	 .attr("x", 10)
-	  	 .attr("y", 10)
-	  	 .attr("rx", 10)
-	  	 .attr("ry", 10)
-	  	 .attr("width", 250)
-		 .attr("height", 550)
-		 .style("fill", "transparent")
-		 .style("stroke", "grey")
-		 .style("stroke-width", "4"); 
-	  	
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 40)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "15px")
-  		 .style("font-weight", "bold")
- 		 .style("font-family", "Quicksand")
- 		 .text(d.id);
-	  	 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 55)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "8px")
- 		 .style("font-family", "Quicksand")
- 		 .text("(click the node to view all the information)");
-	  	 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     //.attr("x", 50)
-	   	 .attr("y", 75)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "13px")
-  		 .style("font-weight", "bold")
- 		 .style("font-family", "Quicksand")
-  		 .tspans(function(h) {
-        	return d3.wordwrap(d.thematic_areas, 25);  // break line after 25 characters
-    		}).attr("x", 50);
-//	     .text(d.thematic_areas);
-	  	 
-	  	 info.append("text")
-    	 .attr("id", "tooltip")
-	     //.attr("x", 120)
-	   	 .attr("y", 120)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "11px")
- 		 .style("font-family", "Quicksand")
- 		  		 .tspans(function(h) {
-        	return d3.wordwrap(d.desc, 25);  // break line after 25 characters
-    		}).attr("x", 50);
-	     //.text(d.desc); //Pending to be wrapped
-
-	  	 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 250)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .text(d.documents);*/
       });
-  /*.on("mouseout", function() {
-        var sel = d3.select(this);
-         sel.classed("hovered",false);
-         d3.selectAll("#tooltip").remove();
-      });*/
-  
-  //Events to display extra information  
-  /*svg.selectAll(".node")
-  .on("mouseover", function(d,i) {
-	  	var d = this.__data__;
-	  	var info = svg.append("g")
-	     .attr("class", "info");
-	  	
-	  	 info.append("rect")
-	  	 .attr("x", 10)
-	  	 .attr("y", 10)
-	  	 .attr("rx", 10)
-	  	 .attr("ry", 10)
-	  	 .attr("width", 250)
-		 .attr("height", 550)
-		 .style("fill", "transparent")
-		 .style("stroke", "grey")
-		 .style("stroke-width", "4"); 
-	  	
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 40)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "15px")
-  		 .style("font-weight", "bold")
- 		 .style("font-family", "Quicksand")
- 		 .text(d.id);
-	  	 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 55)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "8px")
- 		 .style("font-family", "Quicksand")
- 		 .text("(click the node to view all the information)");
-	  	 
-	  	 info.append("text")
-	  	 .attr("id", "tooltip")
-	     //.attr("x", 50)
-	   	 .attr("y", 75)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "13px")
-  		 .style("font-weight", "bold")
- 		 .style("font-family", "Quicksand")
-  		 .tspans(function(h) {
-        	return d3.wordwrap(d.thematic_areas, 25);  // break line after 25 characters
-    		}).attr("x", 50);
-//	     .text(d.thematic_areas);
-	  	 
-	  	 info.append("text")
-    	 .attr("id", "tooltip")
-	     //.attr("x", 120)
-	   	 .attr("y", 120)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .style("font-size", "11px")
- 		 .style("font-family", "Quicksand")
- 		  		 .tspans(function(h) {
-        	return d3.wordwrap(d.desc, 25);  // break line after 25 characters
-    		}).attr("x", 50);
-	     //.text(d.desc); //Pending to be wrapped
 
-	  	 
-	  	 /*info.append("text")
-	  	 .attr("id", "tooltip")
-	     .attr("x", 50)
-	   	 .attr("y", 250)
-	     .attr("height", 100)
-	     .attr("width", 200)
-	     .text(d.documents);
-      })
-  .on("mouseout", function() {
-        var sel = d3.select(this);
-         sel.classed("hovered",false);
-         d3.selectAll("#tooltip").remove();
-      });*/
-  
   simulation
       .nodes(nodes)
       .on("tick", ticked);
@@ -404,4 +237,3 @@ function dragended(d) {
 <h2 class="text-align-justify">This project will study aspects of the 'smart' agenda in which practitioners from the Social and Human Sciences (SSH) offer unique and valuable insights of relevance to innovators and researchers in the ICT - LEIT[1] areas. Centred on topics concerning of users, design, digital rights and critical infrastructures, CANDID will engage SSH and ICT - LEIT researchers in ‘extended peer communications’ aiming at Responsible Innovation.</h2>
 </blockquote>
 
-</body>
