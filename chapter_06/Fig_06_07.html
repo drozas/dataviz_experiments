@@ -35,14 +35,15 @@ rect:hover {
 </style>
 
 <body>
-<div id="tooltip" class="hidden">
+<div id="tooltip">
 	<p><strong>Important Label Heading</strong></p>
-	<p><span id="value">100</span>%</p>
+	<p>Concept: <span id="id">100</span></p>
+	<p>Thematic areas: <span id="thematic_areas">100</span>%</p>
+	<p>Description: <span id="desc">100</span>%</p>
 </div>
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
 <p><script src="https://d3js.org/d3.v4.min.js"></script><script src="http://d3js.org/queue.v1.min.js"></script>
-<script src="https://raw.githubusercontent.com/gka/d3-jetpack/master/build/d3v4%2Bjetpack.js"></script>
 <script>
 
 
@@ -161,8 +162,116 @@ function createForceLayout (nodes, links) {
   //Draw markers  
   d3.selectAll("line").attr("marker-end", "url(#Triangle)");
   
-  //Events to display extra information  
+  //d3.select("#tooltip").classed("hidden", true);
+  
+  //Events to display extra information on html
   svg.selectAll(".node")
+  .on("mouseover", function(d,i) {
+	  	var d = this.__data__;
+	  	
+		//Get this bar's x/y values, then augment for the tooltip
+		//var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+		//var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+		//Update the tooltip position and value
+		d3.select("#tooltip")
+			//.style("left", xPosition + "px")
+			//.style("top", yPosition + "px")						
+			.select("#id")
+			.text(d.id);
+   
+		d3.select("#tooltip")
+		//.style("left", xPosition + "px")
+		//.style("top", yPosition + "px")						
+		.select("#thematic_areas")
+		.text(d.thematic_areas);
+		
+		d3.select("#tooltip")
+		//.style("left", xPosition + "px")
+		//.style("top", yPosition + "px")						
+		.select("#desc")
+		.text(d.desc);
+		//Show the tooltip
+		//d3.select("#tooltip").classed("hidden", false);
+	  	
+	  	/*var info = svg.append("g")
+	     .attr("class", "info");
+	  	
+	  	 info.append("rect")
+	  	 .attr("x", 10)
+	  	 .attr("y", 10)
+	  	 .attr("rx", 10)
+	  	 .attr("ry", 10)
+	  	 .attr("width", 250)
+		 .attr("height", 550)
+		 .style("fill", "transparent")
+		 .style("stroke", "grey")
+		 .style("stroke-width", "4"); 
+	  	
+	  	 info.append("text")
+	  	 .attr("id", "tooltip")
+	     .attr("x", 50)
+	   	 .attr("y", 40)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .style("font-size", "15px")
+  		 .style("font-weight", "bold")
+ 		 .style("font-family", "Quicksand")
+ 		 .text(d.id);
+	  	 
+	  	 info.append("text")
+	  	 .attr("id", "tooltip")
+	     .attr("x", 50)
+	   	 .attr("y", 55)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .style("font-size", "8px")
+ 		 .style("font-family", "Quicksand")
+ 		 .text("(click the node to view all the information)");
+	  	 
+	  	 info.append("text")
+	  	 .attr("id", "tooltip")
+	     //.attr("x", 50)
+	   	 .attr("y", 75)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .style("font-size", "13px")
+  		 .style("font-weight", "bold")
+ 		 .style("font-family", "Quicksand")
+  		 .tspans(function(h) {
+        	return d3.wordwrap(d.thematic_areas, 25);  // break line after 25 characters
+    		}).attr("x", 50);
+//	     .text(d.thematic_areas);
+	  	 
+	  	 info.append("text")
+    	 .attr("id", "tooltip")
+	     //.attr("x", 120)
+	   	 .attr("y", 120)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .style("font-size", "11px")
+ 		 .style("font-family", "Quicksand")
+ 		  		 .tspans(function(h) {
+        	return d3.wordwrap(d.desc, 25);  // break line after 25 characters
+    		}).attr("x", 50);
+	     //.text(d.desc); //Pending to be wrapped
+
+	  	 
+	  	 info.append("text")
+	  	 .attr("id", "tooltip")
+	     .attr("x", 50)
+	   	 .attr("y", 250)
+	     .attr("height", 100)
+	     .attr("width", 200)
+	     .text(d.documents);*/
+      });
+  /*.on("mouseout", function() {
+        var sel = d3.select(this);
+         sel.classed("hovered",false);
+         d3.selectAll("#tooltip").remove();
+      });*/
+  
+  //Events to display extra information  
+  /*svg.selectAll(".node")
   .on("mouseover", function(d,i) {
 	  	var d = this.__data__;
 	  	var info = svg.append("g")
@@ -234,13 +343,13 @@ function createForceLayout (nodes, links) {
 	   	 .attr("y", 250)
 	     .attr("height", 100)
 	     .attr("width", 200)
-	     .text(d.documents);*/
+	     .text(d.documents);
       })
   .on("mouseout", function() {
         var sel = d3.select(this);
          sel.classed("hovered",false);
          d3.selectAll("#tooltip").remove();
-      })  
+      });*/
   
   simulation
       .nodes(nodes)
