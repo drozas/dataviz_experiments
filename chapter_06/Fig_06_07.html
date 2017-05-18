@@ -1,8 +1,44 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
+<style type="text/css">
+
+rect:hover {
+	fill: orange;
+}
+
+#tooltip {
+	position: absolute;
+	width: 200px;
+	height: auto;
+	padding: 10px;
+	background-color: white;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+#tooltip.hidden {
+	display: none;
+}
+
+#tooltip p {
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 20px;
+}
 
 </style>
+
+<body>
+<div id="tooltip" class="hidden">
+	<p><strong>Important Label Heading</strong></p>
+	<p><span id="value">100</span>%</p>
+</div>
 
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet" /><svg height="600" width="960"></svg>
 <p><script src="https://d3js.org/d3.v4.min.js"></script><script src="http://d3js.org/queue.v1.min.js"></script>
@@ -258,3 +294,5 @@ function dragended(d) {
 <hr />
 <h2 class="text-align-justify">This project will study aspects of the 'smart' agenda in which practitioners from the Social and Human Sciences (SSH) offer unique and valuable insights of relevance to innovators and researchers in the ICT - LEIT[1] areas. Centred on topics concerning of users, design, digital rights and critical infrastructures, CANDID will engage SSH and ICT - LEIT researchers in ‘extended peer communications’ aiming at Responsible Innovation.</h2>
 </blockquote>
+
+</body>
