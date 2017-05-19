@@ -1,7 +1,22 @@
 <style type="text/css">
 
-rect:hover {
-	fill: orange;
+line {
+	stroke: black;
+	opacity: .5;
+	stroke-width: 2px;
+}
+
+circle {
+	fill: lightgray;
+	stroke: black;
+	stroke-width: 2px;
+}
+
+.node text {
+	font-size: 15px;
+	text-anchor: middle;
+	font-weight: bold;
+	font-family: Quicksand;
 }
 
 #tooltip {
@@ -117,10 +132,7 @@ function createForceLayout (nodes, links) {
     .attr("class", "links")
     .selectAll("line")
     .data(links)
-    .enter().append("line")
-    .style("stroke", "black")
-    .style("opacity", .5)
-    .style("stroke-width", "2px");
+    .enter().append("line");
   
   //Draw groups for nodes
   var node = svg.append("g")
@@ -134,9 +146,6 @@ function createForceLayout (nodes, links) {
   //Draw circles
   var circles = node.append("circle")
   .attr("r", 10)
-  .style("fill", "lightgray")
-  .style("stroke", "black")
-  .style("stroke-width", "2px")
   .call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
@@ -153,11 +162,7 @@ function createForceLayout (nodes, links) {
   
   //Draw node text
   var text = node.append("text")
-  .style("text-anchor", "middle")
   .attr("y", 25)
-  .style("font-size", "15px")
-  .style("font-weight", "bold")
-  .style("font-family", "Quicksand")
   .text(function(d) {
     return d.id
   });
