@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
 <style type="text/css">
 
 rect:hover {
@@ -19,6 +17,7 @@ rect:hover {
 	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 	pointer-events: none;
+	color: black;
 }
 
 #tooltip.hidden {
@@ -102,7 +101,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody().strength(-600).theta(0.4).distanceMin(25).distanceMax(100))
+    .force("charge", d3.forceManyBody().strength(-1500).theta(0.2).distanceMin(95).distanceMax(200))
     .force("center", d3.forceCenter(width / 2, height / 2));
     
     
